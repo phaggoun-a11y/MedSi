@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
+import type { ReactElement } from "react";
 import type { OrganId, PatientState } from "@/sim/types";
 import { organHealth } from "@/sim/organs";
 
 interface OrganShape {
   id: OrganId;
   label: string;
-  // SVG path or shape
-  shape: JSX.Element;
+  shape: ReactElement;
   cx: number; cy: number;
 }
 
