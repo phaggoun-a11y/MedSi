@@ -106,7 +106,7 @@ export function addEntity(state: PatientState, entity: Entity): PatientState {
   return {
     ...state,
     active: [...state.active, active],
-    events: [...state.events, { tick: state.ticks, severity: "info", message: `+ ${entity.name} applied` }].slice(-30),
+    events: [...state.events, { tick: state.ticks, severity: "info" as const, message: `+ ${entity.name} applied` }].slice(-30),
   };
 }
 
@@ -114,7 +114,7 @@ export function removeEntity(state: PatientState, id: string): PatientState {
   return {
     ...state,
     active: state.active.filter((a) => a.entity.id !== id),
-    events: [...state.events, { tick: state.ticks, severity: "info", message: `– ${id} removed` }].slice(-30),
+    events: [...state.events, { tick: state.ticks, severity: "info" as const, message: `– ${id} removed` }].slice(-30),
   };
 }
 
