@@ -63,25 +63,39 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  /* BIOSIM — clinical dark-lab aesthetic. Deep navy canvas, cyan/emerald telemetry, magenta crisis. */
+  --background: oklch(0.18 0.025 250);
+  --foreground: oklch(0.96 0.01 230);
+  --card: oklch(0.22 0.028 250);
+  --card-foreground: oklch(0.96 0.01 230);
+  --popover: oklch(0.22 0.028 250);
+  --popover-foreground: oklch(0.96 0.01 230);
+  --primary: oklch(0.78 0.16 195);
+  --primary-foreground: oklch(0.16 0.03 240);
+  --secondary: oklch(0.28 0.03 250);
+  --secondary-foreground: oklch(0.96 0.01 230);
+  --muted: oklch(0.26 0.025 250);
+  --muted-foreground: oklch(0.7 0.02 240);
+  --accent: oklch(0.78 0.18 150);
+  --accent-foreground: oklch(0.16 0.03 240);
+  --destructive: oklch(0.65 0.27 18);
+  --destructive-foreground: oklch(0.98 0.005 230);
+  --border: oklch(0.32 0.025 245);
+  --input: oklch(0.28 0.025 245);
+  --ring: oklch(0.78 0.16 195);
+
+  --warning: oklch(0.82 0.16 75);
+  --warning-foreground: oklch(0.18 0.03 240);
+  --crisis: oklch(0.7 0.28 350);
+  --health: oklch(0.78 0.18 150);
+
+  --grid-line: oklch(0.3 0.02 245 / 0.4);
+  --gradient-telemetry: linear-gradient(135deg, oklch(0.78 0.16 195), oklch(0.78 0.18 150));
+  --gradient-crisis: linear-gradient(135deg, oklch(0.7 0.28 350), oklch(0.65 0.27 18));
+  --shadow-glow: 0 0 32px oklch(0.78 0.16 195 / 0.35);
+  --shadow-panel: 0 8px 32px oklch(0.1 0.02 240 / 0.5);
+  --font-display: 'JetBrains Mono', ui-monospace, monospace;
+
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -140,5 +154,51 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-display);
+    background-image:
+      radial-gradient(circle at 20% 10%, oklch(0.78 0.16 195 / 0.08), transparent 40%),
+      radial-gradient(circle at 85% 90%, oklch(0.78 0.18 150 / 0.06), transparent 45%),
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: auto, auto, 48px 48px, 48px 48px;
   }
+}
+
+@theme inline {
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-crisis: var(--crisis);
+  --color-health: var(--health);
+}
+
+@keyframes pulse-organ {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.03); }
+}
+@keyframes flow {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -40; }
+}
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+@keyframes blink-crisis {
+  0%, 100% { filter: drop-shadow(0 0 8px var(--crisis)); }
+  50% { filter: drop-shadow(0 0 24px var(--crisis)); }
+}
+
+.scanline::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(transparent, oklch(0.78 0.16 195 / 0.08), transparent);
+  animation: scan 4s linear infinite;
+  pointer-events: none;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPVmUsaaDhw.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
 }
