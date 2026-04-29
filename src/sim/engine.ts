@@ -84,16 +84,16 @@ export function tick(state: PatientState): PatientState {
   const events: SimEvent[] = [];
   const heart = next.organs.heart;
   if (heart.stats.pressure > 80 && heart.stats.inflammation > 50) {
-    events.push({ tick: next.ticks, severity: "critical", message: "⚠ Cardiac crisis: pressure + inflammation cascade" });
+    events.push({ tick: next.ticks, severity: "critical" as const, message: "⚠ Cardiac crisis: pressure + inflammation cascade" });
   }
   if (next.organs.lungs.stats.o2 < 35) {
-    events.push({ tick: next.ticks, severity: "warning", message: "Hypoxia detected — O₂ saturation critical" });
+    events.push({ tick: next.ticks, severity: "warning" as const, message: "Hypoxia detected — O₂ saturation critical" });
   }
   if (next.organs.liver.stats.toxicity > 75 && next.organs.liver.stats.efficiency < 35) {
-    events.push({ tick: next.ticks, severity: "critical", message: "⚠ Hepatic failure imminent" });
+    events.push({ tick: next.ticks, severity: "critical" as const, message: "⚠ Hepatic failure imminent" });
   }
   if (next.organs.kidneys.stats.filtration < 30) {
-    events.push({ tick: next.ticks, severity: "warning", message: "Renal filtration impaired" });
+    events.push({ tick: next.ticks, severity: "warning" as const, message: "Renal filtration impaired" });
   }
   next.events = [...next.events, ...events].slice(-30);
 
@@ -123,16 +123,16 @@ export function detectInteractions(state: PatientState): SimEvent[] {
   const out: SimEvent[] = [];
   const ids = state.active.map((a) => a.entity.id);
   if (ids.includes("aspirin") && ids.includes("ulcer")) {
-    out.push({ tick: state.ticks, severity: "warning", message: "Aspirin + Ulcer → bleeding risk amplified" });
+    out.push({ tick: state.ticks, severity: "warning" as const, message: "Aspirin + Ulcer → bleeding risk amplified" });
   }
   if (ids.includes("alcohol") && ids.includes("metformin")) {
-    out.push({ tick: state.ticks, severity: "warning", message: "Alcohol + Metformin → lactic acidosis risk" });
+    out.push({ tick: state.ticks, severity: "warning" as const, message: "Alcohol + Metformin → lactic acidosis risk" });
   }
   if (ids.includes("smoking") && ids.includes("hypertension")) {
-    out.push({ tick: state.ticks, severity: "caution", message: "Smoking compounds hypertensive vascular damage" });
+    out.push({ tick: state.ticks, severity: "caution" as const, message: "Smoking compounds hypertensive vascular damage" });
   }
   if (ids.includes("ace_inhibitor") && ids.includes("hypertension")) {
-    out.push({ tick: state.ticks, severity: "info", message: "ACE inhibitor actively suppressing hypertension" });
+    out.push({ tick: state.ticks, severity: "info" as const, message: "ACE inhibitor actively suppressing hypertension" });
   }
   return out;
 }
