@@ -95,6 +95,19 @@ function Index() {
         </div>
       </header>
 
+      {showGraphs && (
+        <div className="mb-4">
+          <StatsGraph history={patient.statsHistory} onClose={() => setShowGraphs(false)} />
+        </div>
+      )}
+
+      {!patient.alive && (
+        <div className="mb-4 rounded-2xl border-2 border-destructive/60 bg-destructive/10 p-4 text-center">
+          <h2 className="text-lg font-bold uppercase tracking-[0.2em] text-destructive">Patient Death</h2>
+          <p className="mt-1 text-xs text-muted-foreground">Simulation ended. Review event log for cause of death.</p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[300px_1fr_340px]">
         {/* Left: picker */}
         <aside className="rounded-2xl border border-border/60 bg-card/60 p-4 shadow-[var(--shadow-panel)] backdrop-blur-sm">
