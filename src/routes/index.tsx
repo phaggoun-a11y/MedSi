@@ -18,12 +18,19 @@ function Index() {
   const [speed, setSpeed] = useState(1);
   const [selected, setSelected] = useState<OrganId>("heart");
   const startRef = useRef<{ profile: PatientProfile; preset: Entity[] } | null>(null);
+  const [showGraphs, setShowGraphs] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [logFilter, setLogFilter] = useState<string>("all");
 
   useEffect(() => {
     if (!running || !patient || !patient.alive) return;
     const id = setInterval(() => setPatient((p) => (p ? tick(p) : p)), 600 / speed);
     return () => clearInterval(id);
   }, [running, speed, patient?.alive]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
 
   if (!patient) {
     return (
