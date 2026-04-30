@@ -46,7 +46,7 @@ export function ProfileSetup({ onStart }: Props) {
           <Activity className="h-6 w-6 text-primary-foreground" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold tracking-[0.18em]">BIOSIM</h1>
+          <h1 className="text-2xl font-bold tracking-[0.18em]">MedSim</h1>
           <p className="text-[11px] uppercase tracking-[0.3em] text-muted-foreground">Patient Configuration · Pre-Simulation</p>
         </div>
       </header>
