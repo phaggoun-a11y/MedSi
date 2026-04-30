@@ -145,7 +145,7 @@ export function BodyMap({ patient, selected, onSelect }: Props) {
 
       {/* Bottom telemetry strip */}
       <div className="pointer-events-none absolute bottom-2 left-2 right-2 flex items-center justify-between text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
-        <span>BIOSIM · {patient.alive ? "VITALS NOMINAL" : "CODE BLUE"}</span>
+        <span>MedSim · {patient.alive ? "VITALS NOMINAL" : "CODE BLUE"}</span>
         <span className="text-primary tabular-nums">HR {heartRate.toFixed(0)} · SpO₂ {patient.organs.lungs.stats.o2.toFixed(0)}</span>
       </div>
     </div>

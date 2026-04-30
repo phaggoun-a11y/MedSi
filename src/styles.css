@@ -63,7 +63,7 @@
 
 :root {
   --radius: 0.625rem;
-  /* BIOSIM — clinical dark-lab aesthetic. Deep navy canvas, cyan/emerald telemetry, magenta crisis. */
+  /* MedSim — clinical dark-lab aesthetic. Deep navy canvas, cyan/emerald telemetry, magenta crisis. */
   --background: oklch(0.18 0.025 250);
   --foreground: oklch(0.96 0.01 230);
   --card: oklch(0.22 0.028 250);

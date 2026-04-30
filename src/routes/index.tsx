@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Activity, FastForward, Pause, Play, RotateCcw, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Activity, BarChart3, FastForward, Moon, Pause, Play, RotateCcw, Sun, X } from "lucide-react";
 import { BodyMap } from "@/components/BodyMap";
 import { EntityPicker } from "@/components/EntityPicker";
 import { ProfileSetup } from "@/components/ProfileSetup";
 import { StatBar } from "@/components/StatBar";
+import { StatsGraph } from "@/components/StatsGraph";
 import { addEntity, detectInteractions, newPatient, removeEntity, tick } from "@/sim/engine";
 import { ORGAN_DEFS, organHealth } from "@/sim/organs";
 import type { Entity, OrganId, PatientProfile, PatientState } from "@/sim/types";
@@ -17,12 +18,19 @@ function Index() {
   const [speed, setSpeed] = useState(1);
   const [selected, setSelected] = useState<OrganId>("heart");
   const startRef = useRef<{ profile: PatientProfile; preset: Entity[] } | null>(null);
+  const [showGraphs, setShowGraphs] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [logFilter, setLogFilter] = useState<string>("all");
 
   useEffect(() => {
     if (!running || !patient || !patient.alive) return;
     const id = setInterval(() => setPatient((p) => (p ? tick(p) : p)), 600 / speed);
     return () => clearInterval(id);
   }, [running, speed, patient?.alive]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
 
   if (!patient) {
     return (
@@ -43,6 +51,10 @@ function Index() {
   const selectedOrgan = patient.organs[selected];
   const selectedDef = ORGAN_DEFS.find((o) => o.id === selected)!;
 
+  const filteredEvents = logFilter === "all"
+    ? patient.events
+    : patient.events.filter((e) => e.message.toLowerCase().includes(logFilter.toLowerCase()));
+
   return (
     <main className="min-h-screen p-4 lg:p-6">
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -51,7 +63,7 @@ function Index() {
             <Activity className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="text-base font-bold tracking-[0.2em]">BIOSIM</h1>
+            <h1 className="text-base font-bold tracking-[0.2em]">MedSim</h1>
             <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
               {patient.profile.name} · {patient.profile.age}y · {patient.profile.sex}
             </p>
@@ -63,6 +75,18 @@ function Index() {
             color={overall > 60 ? "var(--health)" : overall > 35 ? "var(--warning)" : "var(--crisis)"} />
           <Stat label="Active" value={patient.active.length.toString()} />
           <button
+            onClick={() => setShowGraphs((g) => !g)}
+            className={`flex items-center gap-1 rounded-md border px-3 py-1.5 transition-all ${showGraphs ? "border-primary/60 bg-primary/20 text-primary" : "border-border/60 text-muted-foreground hover:text-foreground"}`}
+          >
+            <BarChart3 className="h-3 w-3" /> Graphs
+          </button>
+          <button
+            onClick={() => setDarkMode((d) => !d)}
+            className="rounded-md border border-border/60 px-2 py-1.5 text-muted-foreground hover:text-foreground"
+          >
+            {darkMode ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+          </button>
+          <button
             onClick={() => { setPatient(null); setRunning(true); }}
             className="rounded-md border border-border/60 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] text-muted-foreground hover:text-destructive hover:border-destructive/60"
           >
@@ -70,6 +94,19 @@ function Index() {
           </button>
         </div>
       </header>
+
+      {showGraphs && (
+        <div className="mb-4">
+          <StatsGraph history={patient.statsHistory} onClose={() => setShowGraphs(false)} />
+        </div>
+      )}
+
+      {!patient.alive && (
+        <div className="mb-4 rounded-2xl border-2 border-destructive/60 bg-destructive/10 p-4 text-center">
+          <h2 className="text-lg font-bold uppercase tracking-[0.2em] text-destructive">Patient Death</h2>
+          <p className="mt-1 text-xs text-muted-foreground">Simulation ended. Review event log for cause of death.</p>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[300px_1fr_340px]">
         {/* Left: picker */}
@@ -92,10 +129,10 @@ function Index() {
               {running ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
               {running ? "Pause" : "Run"}
             </button>
-            <div className="flex items-center gap-1 rounded-md border border-border/60 bg-secondary/30 p-1">
-              {[1, 2, 4, 8].map((s) => (
+            <div className="flex items-center gap-1 rounded-xl border border-border/60 bg-secondary/30 p-1">
+              {[0.5, 1, 2, 5, 10].map((s) => (
                 <button key={s} onClick={() => setSpeed(s)}
-                  className={`rounded px-2 py-1 text-[10px] tabular-nums ${speed === s ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+                  className={`rounded-lg px-2 py-1 text-[10px] tabular-nums transition-all ${speed === s ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}>
                   {s}x
                 </button>
               ))}
@@ -172,8 +209,16 @@ function Index() {
 
           <div className="flex-1 rounded-2xl border border-border/60 bg-card/60 p-4 shadow-[var(--shadow-panel)]">
             <h3 className="mb-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Event Log</h3>
-            <div className="max-h-[360px] space-y-1 overflow-y-auto font-mono text-[11px]">
-              {patient.events.slice().reverse().map((e, i) => {
+            <div className="mb-2 flex flex-wrap gap-1">
+              {["all", "heart", "brain", "lungs", "liver", "kidneys"].map((f) => (
+                <button key={f} onClick={() => setLogFilter(f)}
+                  className={`rounded-md px-2 py-0.5 text-[9px] uppercase tracking-[0.1em] transition-all ${logFilter === f ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+                  {f}
+                </button>
+              ))}
+            </div>
+            <div className="max-h-[320px] space-y-1 overflow-y-auto font-mono text-[11px]">
+              {filteredEvents.slice().reverse().map((e, i) => {
                 const color =
                   e.severity === "critical" ? "var(--crisis)" :
                   e.severity === "warning" ? "var(--warning)" :

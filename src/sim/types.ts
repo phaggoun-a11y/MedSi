@@ -1,3 +1,8 @@
+export interface StatsSnapshot {
+  tick: number;
+  organs: Record<string, number>; // organId → health 0-100
+}
+
 export type OrganId =
   | "brain" | "heart" | "lungs" | "liver" | "kidneys"
   | "stomach" | "intestines" | "pancreas" | "spleen"
@@ -60,6 +65,7 @@ export interface PatientState {
   active: ActiveEntity[];
   events: SimEvent[];
   alive: boolean;
+  statsHistory: StatsSnapshot[];
 }
 
 export interface SimEvent {
