@@ -209,8 +209,16 @@ function Index() {
 
           <div className="flex-1 rounded-2xl border border-border/60 bg-card/60 p-4 shadow-[var(--shadow-panel)]">
             <h3 className="mb-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Event Log</h3>
-            <div className="max-h-[360px] space-y-1 overflow-y-auto font-mono text-[11px]">
-              {patient.events.slice().reverse().map((e, i) => {
+            <div className="mb-2 flex flex-wrap gap-1">
+              {["all", "heart", "brain", "lungs", "liver", "kidneys"].map((f) => (
+                <button key={f} onClick={() => setLogFilter(f)}
+                  className={`rounded-md px-2 py-0.5 text-[9px] uppercase tracking-[0.1em] transition-all ${logFilter === f ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+                  {f}
+                </button>
+              ))}
+            </div>
+            <div className="max-h-[320px] space-y-1 overflow-y-auto font-mono text-[11px]">
+              {filteredEvents.slice().reverse().map((e, i) => {
                 const color =
                   e.severity === "critical" ? "var(--crisis)" :
                   e.severity === "warning" ? "var(--warning)" :
