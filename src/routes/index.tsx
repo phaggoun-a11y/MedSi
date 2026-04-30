@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Activity, FastForward, Pause, Play, RotateCcw, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Activity, BarChart3, FastForward, Moon, Pause, Play, RotateCcw, Sun, X } from "lucide-react";
 import { BodyMap } from "@/components/BodyMap";
 import { EntityPicker } from "@/components/EntityPicker";
 import { ProfileSetup } from "@/components/ProfileSetup";
 import { StatBar } from "@/components/StatBar";
+import { StatsGraph } from "@/components/StatsGraph";
 import { addEntity, detectInteractions, newPatient, removeEntity, tick } from "@/sim/engine";
 import { ORGAN_DEFS, organHealth } from "@/sim/organs";
 import type { Entity, OrganId, PatientProfile, PatientState } from "@/sim/types";
