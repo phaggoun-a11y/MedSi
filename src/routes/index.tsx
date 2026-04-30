@@ -51,6 +51,10 @@ function Index() {
   const selectedOrgan = patient.organs[selected];
   const selectedDef = ORGAN_DEFS.find((o) => o.id === selected)!;
 
+  const filteredEvents = logFilter === "all"
+    ? patient.events
+    : patient.events.filter((e) => e.message.toLowerCase().includes(logFilter.toLowerCase()));
+
   return (
     <main className="min-h-screen p-4 lg:p-6">
       <header className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -59,7 +63,7 @@ function Index() {
             <Activity className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="text-base font-bold tracking-[0.2em]">BIOSIM</h1>
+            <h1 className="text-base font-bold tracking-[0.2em]">MedSim</h1>
             <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
               {patient.profile.name} · {patient.profile.age}y · {patient.profile.sex}
             </p>
