@@ -129,10 +129,10 @@ function Index() {
               {running ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
               {running ? "Pause" : "Run"}
             </button>
-            <div className="flex items-center gap-1 rounded-md border border-border/60 bg-secondary/30 p-1">
-              {[1, 2, 4, 8].map((s) => (
+            <div className="flex items-center gap-1 rounded-xl border border-border/60 bg-secondary/30 p-1">
+              {[0.5, 1, 2, 5, 10].map((s) => (
                 <button key={s} onClick={() => setSpeed(s)}
-                  className={`rounded px-2 py-1 text-[10px] tabular-nums ${speed === s ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+                  className={`rounded-lg px-2 py-1 text-[10px] tabular-nums transition-all ${speed === s ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"}`}>
                   {s}x
                 </button>
               ))}
