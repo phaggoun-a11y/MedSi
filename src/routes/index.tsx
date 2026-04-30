@@ -75,6 +75,18 @@ function Index() {
             color={overall > 60 ? "var(--health)" : overall > 35 ? "var(--warning)" : "var(--crisis)"} />
           <Stat label="Active" value={patient.active.length.toString()} />
           <button
+            onClick={() => setShowGraphs((g) => !g)}
+            className={`flex items-center gap-1 rounded-md border px-3 py-1.5 transition-all ${showGraphs ? "border-primary/60 bg-primary/20 text-primary" : "border-border/60 text-muted-foreground hover:text-foreground"}`}
+          >
+            <BarChart3 className="h-3 w-3" /> Graphs
+          </button>
+          <button
+            onClick={() => setDarkMode((d) => !d)}
+            className="rounded-md border border-border/60 px-2 py-1.5 text-muted-foreground hover:text-foreground"
+          >
+            {darkMode ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+          </button>
+          <button
             onClick={() => { setPatient(null); setRunning(true); }}
             className="rounded-md border border-border/60 px-3 py-1.5 text-[10px] uppercase tracking-[0.15em] text-muted-foreground hover:text-destructive hover:border-destructive/60"
           >
